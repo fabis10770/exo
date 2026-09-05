@@ -1,21 +1,53 @@
-# Routes
+# Exoclust
 
-TanStack Start uses **file-based routing**. Every `.tsx` file in this directory
-defines a route. Do **not** create `src/pages/`, `src/routes/_app/index.tsx`, or
-`app/layout.tsx` — those are Next.js / Remix conventions. The only root layout
-is `src/routes/__root.tsx`.
+A modern full-stack web application built with React, TypeScript, and the TanStack ecosystem.
 
-## Conventions
+## 🚀 Tech Stack
 
-| File | URL |
-| --- | --- |
-| `index.tsx` | `/` |
-| `about.tsx` | `/about` |
-| `users/index.tsx` | `/users` |
-| `users/$id.tsx` | `/users/:id` (dynamic — bare `$`, no curly braces) |
-| `posts/{-$category}.tsx` | `/posts/:category?` (optional segment) |
-| `files/$.tsx` | `/files/*` (splat — read via `_splat` param, never `*`) |
-| `_layout.tsx` | layout route (renders children via `<Outlet />`) |
-| `__root.tsx` | app shell — wraps every page; preserve `<Outlet />` |
+- **Frontend Framework:** React 18
+- **Language:** TypeScript
+- **Build Tool:** Vite
+- **Routing & SSR:** TanStack Start & TanStack React Router
+- **State & Data Fetching:** TanStack React Query
+- **Styling:** Tailwind CSS v4
+- **UI Components:** Radix UI (shadcn/ui style)
+- **Icons:** Lucide React
+- **Forms & Validation:** React Hook Form + Zod
+- **Charts:** Recharts
 
-`routeTree.gen.ts` is auto-generated. Don't edit it by hand.
+## 💻 Getting Started
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/fabis10770/exo.git
+cd exoclust-lovable-files
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`.
+
+## 📁 Project Structure
+
+- `src/assets/`: Images and static assets
+- `src/components/ui/`: Reusable, accessible UI components (built on Radix UI)
+- `src/routes/`: File-based routing handled by TanStack Router
+- `src/server.ts`: The current Node.js SSR/Backend entry point
+- `src/lib/`: Utility functions and error reporting
+
+## 🛣️ Roadmap
+- Transition the backend architecture from Node.js (TanStack Start) to a **Python FastAPI** microservice.
+- Maintain React SPA frontend architecture for seamless integration with the new Python API.
