@@ -1,6 +1,7 @@
 import { ArrowRight, ChevronRight, Activity, Database, Globe, BrainCircuit, Cpu, AudioLines, Code2, Network, ArrowUpRight, Lightbulb, Hexagon } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import heroVideo from "../assets/hero_video.mp4";
 
 const ExoclustLogo = ({ className = "size-9" }: { className?: string }) => (
   <svg viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className={className}>
@@ -81,7 +82,15 @@ function Hero() {
   return (
     <section id="top" className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-deep text-white pt-20">
       <div className="absolute inset-0 z-0">
-        <img src={heroBg} alt="Abstract Data Visualization" className="w-full h-full object-cover opacity-30 mix-blend-screen" />
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="w-full h-full object-cover opacity-30 mix-blend-screen"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-deep/50 via-deep/80 to-deep"></div>
         
         {/* Animated geometric elements */}
@@ -408,7 +417,7 @@ function ContactSection() {
         <div className="bg-white p-10 md:p-12 rounded-[2rem] shadow-2xl">
            <div className="mb-8">
              <h3 className="text-2xl font-display font-semibold text-ink mb-2">Start a conversation</h3>
-             <p className="text-ink/60">Fill out the form below or email <a href="mailto:hello@exoclust.com" className="text-brand hover:underline">hello@exoclust.com</a></p>
+             <p className="text-ink/60">Fill out the form below or email <a href="mailto:exoclust.in@gmail.com" className="text-brand hover:underline">exoclust.in@gmail.com</a></p>
            </div>
            <form className="space-y-6">
              <div className="grid grid-cols-2 gap-6">

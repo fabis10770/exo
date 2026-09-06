@@ -230,7 +230,7 @@ function ExoclustHome() {
               <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/50">Initiate contact</p>
               <h2 className="mx-auto mt-8 max-w-[24ch] font-display text-4xl font-semibold leading-tight text-white md:text-5xl">Let&apos;s build the system your next year depends on.</h2>
               <p className="mx-auto mt-8 max-w-[50ch] text-base leading-relaxed text-white/65">Tell us where the complexity lives. We&apos;ll come back with a measured path, a practical timeline, and a clear first step.</p>
-              <a href="mailto:hello@exoclust.com" className="mt-12 inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold text-brand ring-1 ring-white transition-shadow hover:shadow-[0_0_30px] hover:shadow-white/20">
+              <a href="mailto:exoclust.in@gmail.com" className="mt-12 inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold text-brand ring-1 ring-white transition-shadow hover:shadow-[0_0_30px] hover:shadow-white/20">
                 Email Exoclust
                 <ArrowRight className="size-4" aria-hidden="true" />
               </a>
