@@ -498,7 +498,7 @@ function ContactSection() {
         <div className="bg-white p-10 md:p-12 rounded-[2rem] shadow-2xl">
            <div className="mb-8">
              <h3 className="text-2xl font-display font-semibold text-ink mb-2">Start a conversation</h3>
-             <p className="text-ink/60">Fill out the form below or email <a href="mailto:hello@exoclust.com" className="text-brand hover:underline">hello@exoclust.com</a></p>
+             <p className="text-ink/60">Fill out the form below or email <a href="mailto:exoclust.in@gmail.com" className="text-brand hover:underline">exoclust.in@gmail.com</a></p>
            </div>
            
            {status === 'success' ? (
