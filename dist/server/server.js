@@ -95,9 +95,16 @@ function renderErrorPage() {
 }
 //#endregion
 //#region src/server.ts
+if (typeof process !== "undefined") process.on("uncaughtException", (err) => {
+	if (err && err.message && err.message.includes("Stream lifetime exceeded")) {
+		console.warn("Caught and ignored expected SSR stream lifetime timeout.");
+		return;
+	}
+	console.error("Uncaught exception:", err);
+});
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./assets/server-Ug06yBMZ.js").then((n) => n.t).then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./assets/server-C19Cdxc1.js").then((n) => n.t).then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
