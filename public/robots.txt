@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /adminpanel
+
+Sitemap: https://exoclust.com/sitemap.xml
