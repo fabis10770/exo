@@ -3,7 +3,7 @@ import { HeadContent, Link, Outlet, Scripts, createFileRoute, createRootRouteWit
 import { jsx, jsxs } from "react/jsx-runtime";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DslMsgyM.css";
+var styles_default = "/assets/styles-DFZ3H5jZ.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -95,7 +95,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$1 = createRootRouteWithContext()({
+var Route$2 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -113,6 +113,14 @@ var Route$1 = createRootRouteWithContext()({
 				content: "Exoclust"
 			},
 			{
+				name: "keywords",
+				content: "Applied AI, Web Product Engineering, Automation, Computer Vision, Voice AI, Exoclust"
+			},
+			{
+				name: "robots",
+				content: "index, follow"
+			},
+			{
 				property: "og:title",
 				content: "Exoclust — Applied Intelligence, Engineered"
 			},
@@ -125,6 +133,18 @@ var Route$1 = createRootRouteWithContext()({
 				content: "website"
 			},
 			{
+				property: "og:url",
+				content: "https://exoclust.com/"
+			},
+			{
+				property: "og:site_name",
+				content: "Exoclust"
+			},
+			{
+				property: "og:locale",
+				content: "en_US"
+			},
+			{
 				name: "twitter:card",
 				content: "summary_large_image"
 			},
@@ -133,13 +153,32 @@ var Route$1 = createRootRouteWithContext()({
 				content: "@exoclust"
 			}
 		],
-		links: [{
-			rel: "stylesheet",
-			href: styles_default
-		}, {
-			rel: "icon",
-			href: "/favicon.svg",
-			type: "image/svg+xml"
+		links: [
+			{
+				rel: "canonical",
+				href: "https://exoclust.com/"
+			},
+			{
+				rel: "stylesheet",
+				href: styles_default
+			},
+			{
+				rel: "icon",
+				href: "/favicon.svg",
+				type: "image/svg+xml"
+			}
+		],
+		scripts: [{
+			type: "application/ld+json",
+			children: JSON.stringify({
+				"@context": "https://schema.org",
+				"@type": "Organization",
+				"name": "Exoclust",
+				"url": "https://exoclust.com",
+				"logo": "https://exoclust.com/favicon.svg",
+				"description": "Exoclust builds intelligent digital systems across web engineering, AI, computer vision, and voice automation.",
+				"sameAs": ["https://twitter.com/exoclust", "https://linkedin.com/company/exoclust"]
+			})
 		}]
 	}),
 	shellComponent: RootShell,
@@ -154,7 +193,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$1.useRouteContext();
+	const { queryClient } = Route$2.useRouteContext();
 	return /* @__PURE__ */ jsx(QueryClientProvider, {
 		client: queryClient,
 		children: /* @__PURE__ */ jsx(Outlet, {})
@@ -162,15 +201,27 @@ function RootComponent() {
 }
 //#endregion
 //#region src/routes/index.tsx
-var $$splitComponentImporter = () => import("./routes-BhrFVwY5.js");
+var $$splitComponentImporter$1 = () => import("./routes-CBvzoWj1.js");
+var Route$1 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+//#endregion
+//#region src/routes/adminpanel.tsx
+var $$splitComponentImporter = () => import("./adminpanel-Bktu7OIe.js");
+var Route = createFileRoute("/adminpanel")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 //#endregion
 //#region src/routeTree.gen.ts
-var rootRouteChildren = { IndexRoute: createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter, "component") }).update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => Route$1
-}) };
-var routeTree = Route$1._addFileChildren(rootRouteChildren)._addFileTypes();
+var rootRouteChildren = {
+	IndexRoute: Route$1.update({
+		id: "/",
+		path: "/",
+		getParentRoute: () => Route$2
+	}),
+	AdminpanelRoute: Route.update({
+		id: "/adminpanel",
+		path: "/adminpanel",
+		getParentRoute: () => Route$2
+	})
+};
+var routeTree = Route$2._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

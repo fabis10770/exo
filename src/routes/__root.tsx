@@ -83,22 +83,45 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Exoclust builds intelligent digital systems across web engineering, AI, computer vision, and voice automation.",
       },
       { name: "author", content: "Exoclust" },
+      { name: "keywords", content: "Applied AI, Web Product Engineering, Automation, Computer Vision, Voice AI, Exoclust" },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Exoclust — Applied Intelligence, Engineered" },
       {
         property: "og:description",
         content: "Technology systems that turn complex operations into clear momentum.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://exoclust.com/" },
+      { property: "og:site_name", content: "Exoclust" },
+      { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@exoclust" },
     ],
     links: [
+      { rel: "canonical", href: "https://exoclust.com/" },
       {
         rel: "stylesheet",
         href: appCss,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Exoclust",
+          "url": "https://exoclust.com",
+          "logo": "https://exoclust.com/favicon.svg",
+          "description": "Exoclust builds intelligent digital systems across web engineering, AI, computer vision, and voice automation.",
+          "sameAs": [
+            "https://twitter.com/exoclust",
+            "https://linkedin.com/company/exoclust"
+          ]
+        })
+      }
+    ]
   }),
   shellComponent: RootShell,
   component: RootComponent,

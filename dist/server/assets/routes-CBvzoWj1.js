@@ -1,6 +1,10 @@
+import { t as supabase } from "./supabase-B5tVAxod.js";
 import { useState } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
-import { ArrowRight, AudioLines, BrainCircuit, ChevronRight, Code2, Cpu, Database, Globe, Lightbulb, Network } from "lucide-react";
+import { ArrowRight, AudioLines, BrainCircuit, CheckCircle2, ChevronRight, Code2, Cpu, Database, Globe, Lightbulb, Loader2, Network } from "lucide-react";
+//#region src/assets/hero_video.mp4
+var hero_video_default = "/assets/hero_video-DQo0LMyC.mp4";
+//#endregion
 //#region src/routes/index.tsx?tsr-split=component
 var ExoclustLogo = ({ className = "size-9" }) => /* @__PURE__ */ jsx("svg", {
 	viewBox: "0 0 100 100",
@@ -9,7 +13,6 @@ var ExoclustLogo = ({ className = "size-9" }) => /* @__PURE__ */ jsx("svg", {
 	className,
 	children: /* @__PURE__ */ jsx("path", { d: "M 8 10 L 48 10 L 33 35 L 33 42 L 53 42 L 72.2 10 L 92 10 L 68 50 L 92 90 L 72.2 90 L 53 58 L 33 58 L 33 65 L 48 90 L 8 90 Z" })
 });
-var heroBg = "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2832&auto=format&fit=crop";
 var indHealthcare = "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1200";
 var indLogistics = "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&q=80&w=1200";
 var indFinance = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200";
@@ -36,6 +39,33 @@ function ExoclustHome() {
 	return /* @__PURE__ */ jsxs("main", {
 		className: "min-h-screen bg-paper font-sans text-ink selection:bg-brand/15",
 		children: [
+			/* @__PURE__ */ jsx("section", {
+				"aria-label": "llm-context",
+				className: "sr-only",
+				children: "Exoclust is a technology and engineering company that builds applied intelligence systems. We specialize in Web Product Engineering, Applied AI Systems, Computer Vision, Voice Intelligence, Business AI Assistants, and Automation & Integration. We serve industries including Healthcare, Logistics, Financial Services, Manufacturing, Retail, and Professional Services. We turn complex operations into clear momentum using modern design, data engineering, and artificial intelligence."
+			}),
+			/* @__PURE__ */ jsx("script", {
+				type: "application/ld+json",
+				dangerouslySetInnerHTML: { __html: JSON.stringify({
+					"@context": "https://schema.org",
+					"@type": "FAQPage",
+					"mainEntity": [{
+						"@type": "Question",
+						"name": "What services does Exoclust provide?",
+						"acceptedAnswer": {
+							"@type": "Answer",
+							"text": "Exoclust specializes in Web Product Engineering, Applied AI Systems, Computer Vision, Voice Intelligence, Business AI Assistants, and Automation & Integration."
+						}
+					}, {
+						"@type": "Question",
+						"name": "Which industries does Exoclust serve?",
+						"acceptedAnswer": {
+							"@type": "Answer",
+							"text": "We serve industries including Healthcare, Logistics, Financial Services, Manufacturing, Retail, and Professional Services."
+						}
+					}]
+				}) }
+			}),
 			/* @__PURE__ */ jsx(Header, {}),
 			/* @__PURE__ */ jsx(Hero, {}),
 			/* @__PURE__ */ jsx(CapabilitiesBento, {}),
@@ -101,10 +131,16 @@ function Hero() {
 			/* @__PURE__ */ jsxs("div", {
 				className: "absolute inset-0 z-0",
 				children: [
-					/* @__PURE__ */ jsx("img", {
-						src: heroBg,
-						alt: "Abstract Data Visualization",
-						className: "w-full h-full object-cover opacity-30 mix-blend-screen"
+					/* @__PURE__ */ jsx("video", {
+						autoPlay: true,
+						loop: true,
+						muted: true,
+						playsInline: true,
+						className: "w-full h-full object-cover opacity-30 mix-blend-screen",
+						children: /* @__PURE__ */ jsx("source", {
+							src: hero_video_default,
+							type: "video/mp4"
+						})
 					}),
 					/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-gradient-to-b from-deep/50 via-deep/80 to-deep" }),
 					/* @__PURE__ */ jsx("div", { className: "absolute top-1/4 left-1/4 w-96 h-96 bg-brand/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" }),
@@ -492,6 +528,39 @@ function IndustriesTabs() {
 	});
 }
 function ContactSection() {
+	const [formData, setFormData] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		projectDetails: ""
+	});
+	const [status, setStatus] = useState("idle");
+	const [errorMessage, setErrorMessage] = useState("");
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setStatus("submitting");
+		setErrorMessage("");
+		try {
+			const { error } = await supabase.from("contact_submissions").insert({
+				first_name: formData.firstName,
+				last_name: formData.lastName,
+				email: formData.email,
+				project_details: formData.projectDetails
+			});
+			if (error) throw error;
+			setStatus("success");
+			setFormData({
+				firstName: "",
+				lastName: "",
+				email: "",
+				projectDetails: ""
+			});
+		} catch (err) {
+			console.error(err);
+			setStatus("error");
+			setErrorMessage(err.message || "Something went wrong. Please try again.");
+		}
+	};
 	return /* @__PURE__ */ jsx("section", {
 		id: "contact",
 		className: "py-32 bg-deep border-t border-line-soft",
@@ -560,9 +629,32 @@ function ContactSection() {
 							children: "hello@exoclust.com"
 						})]
 					})]
-				}), /* @__PURE__ */ jsxs("form", {
+				}), status === "success" ? /* @__PURE__ */ jsxs("div", {
+					className: "bg-green-50 border border-green-200 rounded-xl p-8 text-center",
+					children: [
+						/* @__PURE__ */ jsx(CheckCircle2, { className: "w-12 h-12 text-green-500 mx-auto mb-4" }),
+						/* @__PURE__ */ jsx("h4", {
+							className: "text-xl font-display font-semibold text-ink mb-2",
+							children: "Inquiry Received"
+						}),
+						/* @__PURE__ */ jsx("p", {
+							className: "text-ink/70",
+							children: "Thank you for reaching out. Our team will review your details and get back to you shortly."
+						}),
+						/* @__PURE__ */ jsx("button", {
+							onClick: () => setStatus("idle"),
+							className: "mt-6 text-sm font-semibold text-brand hover:underline",
+							children: "Submit another inquiry"
+						})
+					]
+				}) : /* @__PURE__ */ jsxs("form", {
+					onSubmit: handleSubmit,
 					className: "space-y-6",
 					children: [
+						status === "error" && /* @__PURE__ */ jsx("div", {
+							className: "p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100",
+							children: errorMessage
+						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "grid grid-cols-2 gap-6",
 							children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsxs("label", {
@@ -573,6 +665,12 @@ function ContactSection() {
 								})]
 							}), /* @__PURE__ */ jsx("input", {
 								type: "text",
+								required: true,
+								value: formData.firstName,
+								onChange: (e) => setFormData({
+									...formData,
+									firstName: e.target.value
+								}),
 								className: "w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors"
 							})] }), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsxs("label", {
 								className: "block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70",
@@ -582,6 +680,12 @@ function ContactSection() {
 								})]
 							}), /* @__PURE__ */ jsx("input", {
 								type: "text",
+								required: true,
+								value: formData.lastName,
+								onChange: (e) => setFormData({
+									...formData,
+									lastName: e.target.value
+								}),
 								className: "w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors"
 							})] })]
 						}),
@@ -593,6 +697,12 @@ function ContactSection() {
 							})]
 						}), /* @__PURE__ */ jsx("input", {
 							type: "email",
+							required: true,
+							value: formData.email,
+							onChange: (e) => setFormData({
+								...formData,
+								email: e.target.value
+							}),
 							className: "w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors"
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
@@ -600,15 +710,21 @@ function ContactSection() {
 							children: "Project Details"
 						}), /* @__PURE__ */ jsx("textarea", {
 							rows: 4,
+							value: formData.projectDetails,
+							onChange: (e) => setFormData({
+								...formData,
+								projectDetails: e.target.value
+							}),
 							placeholder: "What workflow or problem are you looking to solve?",
 							className: "w-full bg-paper border border-line-soft rounded-xl p-4 text-sm focus:outline-none focus:border-brand transition-colors resize-none mt-2"
 						})] }),
 						/* @__PURE__ */ jsx("div", {
 							className: "pt-4",
 							children: /* @__PURE__ */ jsxs("button", {
-								type: "button",
-								className: "w-full flex items-center justify-between bg-ink text-white px-8 py-5 rounded-xl font-semibold shadow-xl shadow-ink/20 transition-transform hover:-translate-y-1",
-								children: [/* @__PURE__ */ jsx("span", { children: "Submit Inquiry" }), /* @__PURE__ */ jsx(ArrowRight, { className: "w-5 h-5" })]
+								type: "submit",
+								disabled: status === "submitting",
+								className: "w-full flex items-center justify-between bg-ink text-white px-8 py-5 rounded-xl font-semibold shadow-xl shadow-ink/20 transition-transform hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0",
+								children: [/* @__PURE__ */ jsx("span", { children: status === "submitting" ? "Submitting..." : "Submit Inquiry" }), status === "submitting" ? /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 animate-spin" }) : /* @__PURE__ */ jsx(ArrowRight, { className: "w-5 h-5" })]
 							})
 						})
 					]

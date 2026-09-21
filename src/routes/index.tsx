@@ -1,6 +1,7 @@
-import { ArrowRight, ChevronRight, Activity, Database, Globe, BrainCircuit, Cpu, AudioLines, Code2, Network, ArrowUpRight, Lightbulb, Hexagon } from "lucide-react";
+import { ArrowRight, ChevronRight, Activity, Database, Globe, BrainCircuit, Cpu, AudioLines, Code2, Network, ArrowUpRight, Lightbulb, Hexagon, Loader2, CheckCircle2 } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 import heroVideo from "../assets/hero_video.mp4";
 
 const ExoclustLogo = ({ className = "size-9" }: { className?: string }) => (
@@ -44,6 +45,44 @@ function SectionLabelLeft({ children }: { children: string }) {
 function ExoclustHome() {
   return (
     <main className="min-h-screen bg-paper font-sans text-ink selection:bg-brand/15">
+      {/* AEO / LLM Context for AI Search Engines */}
+      <section aria-label="llm-context" className="sr-only">
+        Exoclust is a technology and engineering company that builds applied intelligence systems. 
+        We specialize in Web Product Engineering, Applied AI Systems, Computer Vision, Voice Intelligence, 
+        Business AI Assistants, and Automation & Integration. We serve industries including Healthcare, 
+        Logistics, Financial Services, Manufacturing, Retail, and Professional Services. We turn complex 
+        operations into clear momentum using modern design, data engineering, and artificial intelligence.
+      </section>
+
+      {/* JSON-LD FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What services does Exoclust provide?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Exoclust specializes in Web Product Engineering, Applied AI Systems, Computer Vision, Voice Intelligence, Business AI Assistants, and Automation & Integration."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Which industries does Exoclust serve?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "We serve industries including Healthcare, Logistics, Financial Services, Manufacturing, Retail, and Professional Services."
+                }
+              }
+            ]
+          })
+        }}
+      />
+      
       <Header />
       <Hero />
       <CapabilitiesBento />
@@ -376,6 +415,48 @@ function IndustriesTabs() {
 }
 
 function ContactSection() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    projectDetails: ''
+  });
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('submitting');
+    setErrorMessage('');
+
+    if (!/^\d{10}$/.test(formData.phone)) {
+      setStatus('error');
+      setErrorMessage('Phone number must be exactly 10 digits.');
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          project_details: formData.projectDetails
+        });
+
+      if (error) throw error;
+      setStatus('success');
+      setFormData({ firstName: '', lastName: '', email: '', phone: '', projectDetails: '' });
+    } catch (err: any) {
+      console.error(err);
+      setStatus('error');
+      setErrorMessage(err.message || 'Something went wrong. Please try again.');
+    }
+  };
+
   return (
     <section id="contact" className="py-32 bg-deep border-t border-line-soft">
       <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-20 items-center">
@@ -419,32 +500,94 @@ function ContactSection() {
              <h3 className="text-2xl font-display font-semibold text-ink mb-2">Start a conversation</h3>
              <p className="text-ink/60">Fill out the form below or email <a href="mailto:exoclust.in@gmail.com" className="text-brand hover:underline">exoclust.in@gmail.com</a></p>
            </div>
-           <form className="space-y-6">
-             <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">First Name <span className="text-brand">*</span></label>
-                  <input type="text" className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Last Name <span className="text-brand">*</span></label>
-                  <input type="text" className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" />
-                </div>
-             </div>
-             <div>
-                <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Work Email <span className="text-brand">*</span></label>
-                <input type="email" className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" />
-             </div>
-             <div>
-                <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Project Details</label>
-                <textarea rows={4} placeholder="What workflow or problem are you looking to solve?" className="w-full bg-paper border border-line-soft rounded-xl p-4 text-sm focus:outline-none focus:border-brand transition-colors resize-none mt-2"></textarea>
-             </div>
-             <div className="pt-4">
-               <button type="button" className="w-full flex items-center justify-between bg-ink text-white px-8 py-5 rounded-xl font-semibold shadow-xl shadow-ink/20 transition-transform hover:-translate-y-1">
-                 <span>Submit Inquiry</span>
-                 <ArrowRight className="w-5 h-5" />
+           
+           {status === 'success' ? (
+             <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
+               <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-4" />
+               <h4 className="text-xl font-display font-semibold text-ink mb-2">Inquiry Received</h4>
+               <p className="text-ink/70">Thank you for reaching out. Our team will review your details and get back to you shortly.</p>
+               <button 
+                 onClick={() => setStatus('idle')}
+                 className="mt-6 text-sm font-semibold text-brand hover:underline"
+               >
+                 Submit another inquiry
                </button>
              </div>
-           </form>
+           ) : (
+             <form onSubmit={handleSubmit} className="space-y-6">
+               {status === 'error' && (
+                 <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
+                   {errorMessage}
+                 </div>
+               )}
+               <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">First Name <span className="text-brand">*</span></label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.firstName}
+                      onChange={e => setFormData({...formData, firstName: e.target.value})}
+                      className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Last Name <span className="text-brand">*</span></label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.lastName}
+                      onChange={e => setFormData({...formData, lastName: e.target.value})}
+                      className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" 
+                    />
+                  </div>
+               </div>
+               <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Work Email <span className="text-brand">*</span></label>
+                    <input 
+                      type="email" 
+                      required
+                      value={formData.email}
+                      onChange={e => setFormData({...formData, email: e.target.value})}
+                      className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Phone Number <span className="text-brand">*</span></label>
+                    <input 
+                      type="tel" 
+                      required
+                      pattern="\d{10}"
+                      title="Phone number must be exactly 10 digits"
+                      value={formData.phone}
+                      onChange={e => setFormData({...formData, phone: e.target.value})}
+                      className="w-full bg-paper border-b border-line-soft p-3 text-sm focus:outline-none focus:border-brand transition-colors" 
+                    />
+                  </div>
+               </div>
+               <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest mb-2 text-ink/70">Project Details</label>
+                  <textarea 
+                    rows={4} 
+                    value={formData.projectDetails}
+                    onChange={e => setFormData({...formData, projectDetails: e.target.value})}
+                    placeholder="What workflow or problem are you looking to solve?" 
+                    className="w-full bg-paper border border-line-soft rounded-xl p-4 text-sm focus:outline-none focus:border-brand transition-colors resize-none mt-2"
+                  ></textarea>
+               </div>
+               <div className="pt-4">
+                 <button 
+                   type="submit" 
+                   disabled={status === 'submitting'}
+                   className="w-full flex items-center justify-between bg-ink text-white px-8 py-5 rounded-xl font-semibold shadow-xl shadow-ink/20 transition-transform hover:-translate-y-1 disabled:opacity-70 disabled:hover:translate-y-0"
+                 >
+                   <span>{status === 'submitting' ? 'Submitting...' : 'Submit Inquiry'}</span>
+                   {status === 'submitting' ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                 </button>
+               </div>
+             </form>
+           )}
         </div>
       </div>
     </section>
